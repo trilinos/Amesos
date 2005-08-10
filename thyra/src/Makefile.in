@@ -14,10 +14,36 @@
 
 @SET_MAKE@
 
-#@HEADER
-#@HEADER
+# @HEADER
+# ************************************************************************
+# 
+#                 Amesos: Direct Sparse Solver Package
+#                 Copyright (2004) Sandia Corporation
+# 
+# Under terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+# license for use of this work by or on behalf of the U.S. Government.
+# 
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
+# License, or (at your option) any later version.
+#  
+# This library is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#  
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+# USA
+# Questions? Contact Michael A. Heroux (maherou@sandia.gov) 
+# 
+# ************************************************************************
+# @HEADER
 
-SOURCES = $(Test_Epetra_CrsMatrix_SOURCES)
+
+SOURCES = $(libamesosthyra_a_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -40,9 +66,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-noinst_PROGRAMS = $(am__EXEEXT_1)
-subdir = test/Test_Epetra_CrsMatrix
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+subdir = thyra/src
+DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ac_cxx_bool.m4 \
 	$(top_srcdir)/config/ac_cxx_have_stl.m4 \
@@ -79,26 +105,32 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/Amesos_config.h
 CONFIG_CLEAN_FILES =
-am__EXEEXT_1 = Test_Epetra_CrsMatrix$(EXEEXT)
-PROGRAMS = $(noinst_PROGRAMS)
-am_Test_Epetra_CrsMatrix_OBJECTS =  \
-	Test_Epetra_CrsMatrix-cxx_main.$(OBJEXT)
-Test_Epetra_CrsMatrix_OBJECTS = $(am_Test_Epetra_CrsMatrix_OBJECTS)
+AR = ar
+ARFLAGS = cru
+am__installdirs = $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
+libLIBRARIES_INSTALL = $(INSTALL_DATA)
+LIBRARIES = $(lib_LIBRARIES)
 am__DEPENDENCIES_1 =
-@USING_GNUMAKE_TRUE@am__DEPENDENCIES_2 = $(shell $(am__DEPENDENCIES_1) \
-@USING_GNUMAKE_TRUE@	$(top_srcdir)/config/strip_dup_libs.pl \
-@USING_GNUMAKE_TRUE@	$(AMESOS_EXTRA_LIBS))
+libamesosthyra_a_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
+am__objects_1 = Thyra_AmesosLinearOpWithSolve.$(OBJEXT) \
+	Thyra_AmesosLinearOpWithSolveFactory.$(OBJEXT)
+am_libamesosthyra_a_OBJECTS = $(am__objects_1)
+libamesosthyra_a_OBJECTS = $(am_libamesosthyra_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/src
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(Test_Epetra_CrsMatrix_SOURCES)
-DIST_SOURCES = $(Test_Epetra_CrsMatrix_SOURCES)
+SOURCES = $(libamesosthyra_a_SOURCES)
+DIST_SOURCES = $(libamesosthyra_a_SOURCES)
+includeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -136,7 +168,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 ENABLE_AMESOS_THYRA_FALSE = @ENABLE_AMESOS_THYRA_FALSE@
 ENABLE_AMESOS_THYRA_TRUE = @ENABLE_AMESOS_THYRA_TRUE@
-EXEEXT = .exe
+EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
@@ -288,15 +320,70 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-@USING_GNUMAKE_FALSE@EXAMPLE_LIBS = $(AMESOS_LIBS) $(AMESOS_EXTRA_LIBS)
-@USING_GNUMAKE_TRUE@EXAMPLE_LIBS = $(shell $(PERL_EXE) $(top_srcdir)/config/strip_dup_libs.pl $(AMESOS_LIBS) $(AMESOS_EXTRA_LIBS))
-@USING_GNUMAKE_FALSE@EXAMPLE_INCLUDES = $(AMESOS_INCLUDES) $(AMESOS_EXTRA_INCLUDES)
-@USING_GNUMAKE_TRUE@EXAMPLE_INCLUDES = $(shell $(PERL_EXE) $(top_srcdir)/config/strip_dup_incl_paths.pl $(AMESOS_INCLUDES) $(AMESOS_EXTRA_INCLUDES))
-TEST = Test_Epetra_CrsMatrix
-Test_Epetra_CrsMatrix_SOURCES = $(srcdir)/cxx_main.cpp
-Test_Epetra_CrsMatrix_DEPENDENCIES = $(top_builddir)/src/libamesos.a
-Test_Epetra_CrsMatrix_CXXFLAGS = $(EXAMPLE_INCLUDES)
-Test_Epetra_CrsMatrix_LDADD = $(EXAMPLE_LIBS)
+SOURCE_H = \
+	$(srcdir)/Thyra_AmesosLinearOpWithSolve.hpp \
+	$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.hpp
+
+SOURCE = \
+	$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp \
+	$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp
+
+@USING_GNUMAKE_FALSE@EXPORT_INCLUDES = $(AMESOS_INCLUDES)
+@USING_GNUMAKE_TRUE@EXPORT_INCLUDES = $(shell $(PERL_EXE) $(top_srcdir)/config/strip_dup_incl_paths.pl $(AMESOS_INCLUDES))
+AM_CPPFLAGS = $(EXPORT_INCLUDES)
+
+# --------------------------------------------------------------------
+# Amesos Thyra library specifications
+# --------------------------------------------------------------------
+AMESOS_THYRA_LIB = libamesosthyra.a
+AMESOS_THYRA_H = \
+	$(top_srcdir)/src/Amesos_ConfigDefs.h \
+	$(SOURCE_H)
+
+libamesosthyra_a_SOURCES = \
+	$(SOURCE)
+
+@USE_ALTERNATE_AR_FALSE@libamesosthyra_a_AR = $(AR) cru
+
+#We need the following to support separate build directories
+
+# --------------------------------------------------------------------
+# For using a special archiver
+# --------------------------------------------------------------------
+
+# SPECIAL NOTE: Why is the "else" there?  For some reason, automake
+# fails to define <lib>_AR of USE_ALTERNATE_AR is false, so we have to
+# define it manually.
+@USE_ALTERNATE_AR_TRUE@libamesosthyra_a_AR = $(ALTERNATE_AR)
+
+# --------------------------------------------------------------------
+# Some C++ compilers create extra .o-files for templates. We need to
+# be sure to include these, and this is the hack to do it.
+# --------------------------------------------------------------------
+
+# I have not been able to find any kind of "or" for Automake
+# conditionals. JW
+libamesosthyra_a_LIBADD = $(TRILINOS_TEMPLATE_OBJS) $(XTRALDADD)
+
+# --------------------------------------------------------------------
+# List of all libraries to install in $(libexecdir)
+# --------------------------------------------------------------------
+lib_LIBRARIES = $(AMESOS_THYRA_LIB)
+
+# --------------------------------------------------------------------
+# List of all headers to install in $(includedir)
+# --------------------------------------------------------------------
+include_HEADERS = $(AMESOS_THYRA_H) 
+
+# --------------------------------------------------------------------
+# Special stuff to install in our special $(execincludedir)
+# --------------------------------------------------------------------
+execincludedir = $(exec_prefix)/include
+
+# --------------------------------------------------------------------
+# Files to be deleted by 'make maintainer-clean'
+# --------------------------------------------------------------------
+MAINTAINERCLEANFILES = Makefile.in 
 all: all-am
 
 .SUFFIXES:
@@ -310,9 +397,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  test/Test_Epetra_CrsMatrix/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  thyra/src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  test/Test_Epetra_CrsMatrix/Makefile
+	  $(AUTOMAKE) --foreign  thyra/src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -330,12 +417,39 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+install-libLIBRARIES: $(lib_LIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkdir_p) $(DESTDIR)$(libdir)
+	@list='$(lib_LIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " $(libLIBRARIES_INSTALL) $$p $(DESTDIR)$(libdir)/$$f"; \
+	    $(libLIBRARIES_INSTALL) $$p $(DESTDIR)$(libdir)/$$f; \
+	  else :; fi; \
+	done
+	@$(POST_INSTALL)
+	@list='$(lib_LIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    p="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " $(RANLIB) $(DESTDIR)$(libdir)/$$p"; \
+	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
-Test_Epetra_CrsMatrix$(EXEEXT): $(Test_Epetra_CrsMatrix_OBJECTS) $(Test_Epetra_CrsMatrix_DEPENDENCIES) 
-	@rm -f Test_Epetra_CrsMatrix$(EXEEXT)
-	$(CXXLINK) $(Test_Epetra_CrsMatrix_LDFLAGS) $(Test_Epetra_CrsMatrix_OBJECTS) $(Test_Epetra_CrsMatrix_LDADD) $(LIBS)
+uninstall-libLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LIBRARIES)'; for p in $$list; do \
+	  p="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(libdir)/$$p"; \
+	  rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+clean-libLIBRARIES:
+	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
+libamesosthyra.a: $(libamesosthyra_a_OBJECTS) $(libamesosthyra_a_DEPENDENCIES) 
+	-rm -f libamesosthyra.a
+	$(libamesosthyra_a_AR) libamesosthyra.a $(libamesosthyra_a_OBJECTS) $(libamesosthyra_a_LIBADD)
+	$(RANLIB) libamesosthyra.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -343,7 +457,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -361,22 +476,55 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-Test_Epetra_CrsMatrix-cxx_main.o: $(srcdir)/cxx_main.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(Test_Epetra_CrsMatrix_CXXFLAGS) $(CXXFLAGS) -MT Test_Epetra_CrsMatrix-cxx_main.o -MD -MP -MF "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo" -c -o Test_Epetra_CrsMatrix-cxx_main.o `test -f '$(srcdir)/cxx_main.cpp' || echo '$(srcdir)/'`$(srcdir)/cxx_main.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo" "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po"; else rm -f "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/cxx_main.cpp' object='Test_Epetra_CrsMatrix-cxx_main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po' tmpdepfile='$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.TPo' @AMDEPBACKSLASH@
+Thyra_AmesosLinearOpWithSolve.o: $(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Thyra_AmesosLinearOpWithSolve.o -MD -MP -MF "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo" -c -o Thyra_AmesosLinearOpWithSolve.o `test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp' || echo '$(srcdir)/'`$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo" "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po"; else rm -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp' object='Thyra_AmesosLinearOpWithSolve.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po' tmpdepfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(Test_Epetra_CrsMatrix_CXXFLAGS) $(CXXFLAGS) -c -o Test_Epetra_CrsMatrix-cxx_main.o `test -f '$(srcdir)/cxx_main.cpp' || echo '$(srcdir)/'`$(srcdir)/cxx_main.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Thyra_AmesosLinearOpWithSolve.o `test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp' || echo '$(srcdir)/'`$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp
 
-Test_Epetra_CrsMatrix-cxx_main.obj: $(srcdir)/cxx_main.cpp
-@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(Test_Epetra_CrsMatrix_CXXFLAGS) $(CXXFLAGS) -MT Test_Epetra_CrsMatrix-cxx_main.obj -MD -MP -MF "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo" -c -o Test_Epetra_CrsMatrix-cxx_main.obj `if test -f '$(srcdir)/cxx_main.cpp'; then $(CYGPATH_W) '$(srcdir)/cxx_main.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/cxx_main.cpp'; fi`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo" "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po"; else rm -f "$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/cxx_main.cpp' object='Test_Epetra_CrsMatrix-cxx_main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.Po' tmpdepfile='$(DEPDIR)/Test_Epetra_CrsMatrix-cxx_main.TPo' @AMDEPBACKSLASH@
+Thyra_AmesosLinearOpWithSolve.obj: $(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Thyra_AmesosLinearOpWithSolve.obj -MD -MP -MF "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo" -c -o Thyra_AmesosLinearOpWithSolve.obj `if test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; then $(CYGPATH_W) '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo" "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po"; else rm -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp' object='Thyra_AmesosLinearOpWithSolve.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.Po' tmpdepfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolve.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(Test_Epetra_CrsMatrix_CXXFLAGS) $(CXXFLAGS) -c -o Test_Epetra_CrsMatrix-cxx_main.obj `if test -f '$(srcdir)/cxx_main.cpp'; then $(CYGPATH_W) '$(srcdir)/cxx_main.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/cxx_main.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Thyra_AmesosLinearOpWithSolve.obj `if test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; then $(CYGPATH_W) '$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/Thyra_AmesosLinearOpWithSolve.cpp'; fi`
+
+Thyra_AmesosLinearOpWithSolveFactory.o: $(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Thyra_AmesosLinearOpWithSolveFactory.o -MD -MP -MF "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo" -c -o Thyra_AmesosLinearOpWithSolveFactory.o `test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp' || echo '$(srcdir)/'`$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo" "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po"; else rm -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp' object='Thyra_AmesosLinearOpWithSolveFactory.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po' tmpdepfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Thyra_AmesosLinearOpWithSolveFactory.o `test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp' || echo '$(srcdir)/'`$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp
+
+Thyra_AmesosLinearOpWithSolveFactory.obj: $(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Thyra_AmesosLinearOpWithSolveFactory.obj -MD -MP -MF "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo" -c -o Thyra_AmesosLinearOpWithSolveFactory.obj `if test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; then $(CYGPATH_W) '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo" "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po"; else rm -f "$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp' object='Thyra_AmesosLinearOpWithSolveFactory.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	depfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.Po' tmpdepfile='$(DEPDIR)/Thyra_AmesosLinearOpWithSolveFactory.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Thyra_AmesosLinearOpWithSolveFactory.obj `if test -f '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; then $(CYGPATH_W) '$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; else $(CYGPATH_W) '$(srcdir)/$(srcdir)/Thyra_AmesosLinearOpWithSolveFactory.cpp'; fi`
 uninstall-info-am:
+install-includeHEADERS: $(include_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkdir_p) $(DESTDIR)$(includedir)
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f"; \
+	  $(includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(includedir)/$$f; \
+	done
+
+uninstall-includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(includedir)/$$f"; \
+	  rm -f $(DESTDIR)$(includedir)/$$f; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -425,6 +573,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
+	$(mkdir_p) $(distdir)/../../src
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -453,8 +602,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 installdirs:
+	$(mkdir_p) $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -479,9 +629,10 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
-clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
+clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -499,9 +650,9 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-includeHEADERS
 
-install-exec-am:
+install-exec-am: install-libLIBRARIES
 
 install-info: install-info-am
 
@@ -526,24 +677,26 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLIBRARIES
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-noinstPROGRAMS ctags distclean distclean-compile \
+	clean-libLIBRARIES ctags distclean distclean-compile \
 	distclean-generic distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
+	install-data-am install-exec install-exec-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLIBRARIES install-man install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-info-am
+	uninstall-am uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLIBRARIES
 
+
+# Specify locations of include files within Trilinos
 
 include $(top_builddir)/Makefile.export.amesos
-
-all-libs:
-	cd $(top_builddir)/src ; $(MAKE) all-libs 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
